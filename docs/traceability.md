@@ -1,8 +1,7 @@
 # Traceability table (Assessment 1 → prototype)
-| # | Assessment 1 requirement / finding / recommendation, or marker feedback | Source (A1 section / feedback) | Prototype feature | Technology and why | How I'll test it | Differs from A1? Why |
+
+| # | Requirement / finding / feedback | Source | Prototype feature | Technology and why | How I'll test it | Differs from A1? Why |
 |---|---|---|---|---|---|---|
-| 1 | | | | | | |
-| 2 | | | | | | |
-| 3 | | | | | | |
-| 4 | | | | | | |
-| 5 | | | | | | |
+| 1 | Layout clips instead of restructuring below ~2/5 width (≈768 px) | Assessment 1 section 3.2, section 4; marker Criterion 3 | F1 Responsive 3-panel layout | Flexbox will hold the three panels and bottom player bar. At 768 px the layout will have the right-hand now-playing panel collapse behind a toggle and the player bar will compact. 768 px was chosen because it is 2/5 of 1920, which I measured Spotify would start clipping. | Testing Chrome DevTools device mode at 375, 767, 769, and 1280 px to make sure there is no clipping, there is no horizontal scroll, and every control is reachable. The evidence will be the screenshots at each width, compared with the clipping I noted in Assessment 1. | No, it implements my Assessment 1 recommendation, whichw as to restructure instead of clip, for users on small windows or split-screen. |
+| 2 | Non-essential panels should collapse; navigation must work on small windows | Assessment 1 section 4; brief step 3 (responsive nav menu) | F2 Responsive navigation menu | When the screen size reaches below 768px, naviagation is a bottom tab bar (Home, Search, Library) so it can be reached one-handed. The active tab will use aria-current="page". For wider screens the same links will sit in the left panel. | Testing will be completed by tabbing through every item in order, NVDA (or VoiceOver) announces each tab's name and which page is current, tap targets measured at 44 px or more at 375 px in DevTools. Evidence will be the testing-log rows and a screenshot. | Yes, a refinement, Assessment 1 said to collapse or hide panels, and the tab bar goes further by keeping the core menu funtions (Home, Search, Library) visible at the smaller sizes. |
+| 3 | --- | --- | --- | a | --- | --- |

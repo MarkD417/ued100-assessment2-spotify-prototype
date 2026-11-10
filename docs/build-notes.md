@@ -1,0 +1,1 @@
+Wireframes done: 4/3/2 coloumn grid, panel collapses below 992 px, tab bar below 768 px
