@@ -2,12 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotify Web Player prototype</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web Player prototype</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>Prototype coming soon</h1>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="app">
+    <aside class="sidebar">
+      <nav aria-label="Primary">
+        <ul class="nav-list">
+          <li>
+            <a href="#" class="nav-item" aria-current="page">
+              <img src="assets/icons/home.svg" alt="" width="24" height="24">
+              <span class="nav-label">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item">
+              <img src="assets/icons/search.svg" alt="" width="24" height="24">
+              <span class="nav-label">Search</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item">
+              <img src="assets/icons/library.svg" alt="" width="24" height="24">
+              <span class="nav-label">Library</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <section class="library" aria-labelledby="library-heading">
+        <h2 id="library-heading">Library</h2>
+        <ul class="library-list">
+          <li class="library-row">
+            <span class="thumb" aria-hidden="true"></span>
+            <span class="library-title">Favourites</span>
+          </li>
+          <li class="library-row">
+            <span class="thumb" aria-hidden="true"></span>
+            <span class="library-title">rinse and repeat</span>
+          </li>
+          <li class="library-row">
+            <span class="thumb" aria-hidden="true"></span>
+            <span class="library-title">nonstop</span>
+          </li>
+          <li class="library-row">
+            <span class="thumb" aria-hidden="true"></span>
+            <span class="library-title">Driving</span>
+          </li>
+          <li class="library-row">
+            <span class="thumb" aria-hidden="true"></span>
+            <span class="library-title">lowrider</span>
+          </li>
+          <li class="library-row">
+            <span class="thumb" aria-hidden="true"></span>
+            <span class="library-title">everything</span>
+          </li>
+        </ul>
+      </section>
+    </aside>
+
+    <main id="main">
+      <h1>Made for you</h1>
+      <!-- TODO: <ul class="card-grid"> with 12 <li> cards (later, slice b) -->
+    </main>
+
+    <aside class="now-playing" id="now-playing" aria-label="Now playing">
+      <div class="panel-header">
+        <h2>Now Playing</h2>
+        <button type="button" class="icon-btn" id="panel-close"
+                aria-label="Hide Now Playing panel">✕</button>
+      </div>
+      <img class="cover" src="assets/images/cover-dissolve.png"
+          alt="Cover art for Dissolve by Joji">
+      <p class="track-title">Dissolve</p>
+      <p class="track-artist">Joji</p>
+      <button type="button" class="btn btn-outline" id="report-btn">Report a problem</button>
+    </aside>
+
+    <section class="player" aria-label="Player">
+      <div class="track-info">
+        <img class="thumb" src="assets/images/cover-dissolve.png" alt="">
+        <div>
+          <p class="track-title">Dissolve</p>
+          <p class="track-artist">Joji</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button type="button" aria-label="Previous track">
+          <img src="assets/icons/previous.svg" alt="" width="24" height="24">
+        </button>
+        <button type="button" aria-label="Pause">
+          <img src="assets/icons/pause.svg" alt="" width="24" height="24">
+        </button>
+        <button type="button" aria-label="Next track">
+          <img src="assets/icons/next.svg" alt="" width="24" height="24">
+        </button>
+      </div>
+
+      <div class="progress">
+        <span>1:24</span>
+        <input type="range" min="0" max="100" value="45" aria-label="Seek">
+        <span>2:59</span>
+      </div>
+
+      <div class="volume">
+        <input type="range" min="0" max="100" value="60" aria-label="Volume">
+      </div>
+    </section>
+  </div>
+
   <script src="js/script.js"></script>
 </body>
 </html>

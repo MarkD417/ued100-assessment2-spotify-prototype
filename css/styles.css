@@ -1,3 +1,112 @@
-/* UED100 Assessment 2: Spotify Web Player prototype styles */
+:root {
+  --bg: #121212;
+  --surface: #181818;
+  --surface-hover: #282828;
+  --text: #ffffff;
+  --text-secondary: #b3b3b3;
+  --accent: #1ed760;
+  --accent-hover: #3be477;
+  --error: #ff6b6b;
+  --radius: 8px;
+  --gap: 8px;
+}
 
-   body { background: #121212; color: #fff; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+       font-family: Inter, system-ui, sans-serif; }
+
+.app {
+  display: grid;
+  height: 100vh;
+  height: 100dvh;
+  gap: var(--gap);
+  padding: var(--gap);
+  grid-template-columns: 280px 1fr 320px;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    "sidebar main panel"
+    "player  player player";
+}
+.sidebar     { grid-area: sidebar; }
+main         { grid-area: main; overflow-y: auto; }
+.now-playing { grid-area: panel; }
+.player      { grid-area: player; }
+
+/* Skip link: hidden until it gets keyboard focus */
+.skip-link { position: absolute; left: 8px; top: -48px; z-index: 100;
+  background: var(--accent); color: #121212; padding: 8px 16px;
+  border-radius: var(--radius); }
+.skip-link:focus { top: 8px; }
+
+/* Focus ring from the style guide: applies to everything */
+:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* Panels */
+.sidebar, .now-playing, .player { background: var(--surface); border-radius: var(--radius); }
+.sidebar, main, .now-playing { padding: 16px; overflow-y: auto; }
+
+/* Nav (icon above label, same at every size) */
+.nav-list, .library-list { list-style: none; margin: 0; padding: 0; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px;
+  min-height: 56px; padding: 8px; font-size: 12px; text-decoration: none;
+  color: var(--text-secondary); border-bottom: 3px solid transparent; }
+.nav-item img { width: 24px; height: 24px; opacity: 0.5; }
+.nav-item:hover, .nav-item[aria-current="page"] { color: var(--text); }
+.nav-item:hover img, .nav-item[aria-current="page"] img { opacity: 1; }
+.nav-item[aria-current="page"] { font-weight: 700; border-bottom-color: var(--accent); }
+
+/* Player bar: info | controls over progress | volume */
+.player { display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center;
+  gap: 8px 16px; padding: 8px 16px;
+  grid-template-areas: "info controls volume" "info progress volume"; }
+.track-info { grid-area: info; display: flex; align-items: center; gap: 12px; }
+.controls   { grid-area: controls; display: flex; justify-content: center; gap: 16px; }
+.progress   { grid-area: progress; display: flex; align-items: center; gap: 8px; }
+.progress input { flex: 1; }
+.volume     { grid-area: volume; }
+.track-info .thumb { width: 56px; height: 56px; }
+input[type="range"] { accent-color: var(--accent); }
+.track-title  { font-weight: 700; margin: 0; }
+.track-artist { color: var(--text-secondary); margin: 0; }
+
+.controls button, .icon-btn {
+  background: none; border: 0; color: var(--text); cursor: pointer;
+  min-width: 44px; min-height: 44px;
+}
+
+.library-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.library-row .thumb { flex-shrink: 0; width: 48px; height: 48px; border-radius: 4px;
+                      background: var(--surface-hover); }
+.cover { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--radius); }
+
+@media (max-width: 991px) {
+  .app { grid-template-columns: 88px 1fr;
+         grid-template-areas: "sidebar main" "player player"; }
+  .library { display: none; }
+
+  /* Now Playing becomes a drawer */
+  .now-playing { position: fixed; top: 0; right: 0; bottom: 0; width: 320px; z-index: 50;
+    transform: translateX(100%); visibility: hidden;
+    transition: transform 0.2s ease-out, visibility 0s 0.2s; }
+  .now-playing.is-open { transform: translateX(0); visibility: visible;
+    transition-delay: 0s; }
+}
+
+@media (max-width: 767px) {
+  .app { grid-template-columns: 1fr; padding: 0; gap: 0;
+         grid-template-rows: 1fr auto auto;
+         grid-template-areas: "main" "player" "sidebar"; }
+  .sidebar { padding: 0; border-radius: 0; }
+  .nav-list { display: flex; justify-content: space-around; }
+
+  /* Player becomes the mini-player: info + play/pause only */
+  .player { grid-template-columns: 1fr auto; grid-template-areas: "info controls"; }
+  .progress, .volume { display: none; }
+  .controls button:first-child, .controls button:last-child { display: none; }
+
+  .now-playing { width: 100%; }   /* full-screen sheet */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
