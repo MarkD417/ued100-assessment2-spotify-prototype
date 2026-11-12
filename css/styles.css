@@ -41,6 +41,8 @@ main         { grid-area: main; overflow-y: auto; }
 /* Focus ring from the style guide: applies to everything */
 :focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
+.main-header { display: flex; align-items: center; justify-content: space-between; }
+
 /* Panels */
 .sidebar, .now-playing, .player { background: var(--surface); border-radius: var(--radius); }
 .sidebar, main, .now-playing { padding: 16px; overflow-y: auto; }
@@ -75,6 +77,10 @@ main { scrollbar-color: #535353 transparent; }
 input[type="range"] { accent-color: var(--accent); }
 .track-title  { font-weight: 700; margin: 0; }
 .track-artist { color: var(--text-secondary); margin: 0; }
+.track-info-btn { display: flex; align-items: center; gap: 12px; min-height: 56px;
+  background: none; border: 0; padding: 0; color: inherit; font: inherit;
+  text-align: left; cursor: pointer; }
+.track-info-btn .track-title, .track-info-btn .track-artist { display: block; }
 
 .controls button, .icon-btn {
   background: none; border: 0; color: var(--text); cursor: pointer;
@@ -83,6 +89,7 @@ input[type="range"] { accent-color: var(--accent); }
 
 .panel-header { display: flex; align-items: center; justify-content: space-between; }
 .icon-btn { font-size: 20px; }
+.sheet-controls { display: none; }          /* hidden except on mobile */
 
 .btn-outline { background: none; color: var(--text); font: inherit; cursor: pointer;
                border: 1px solid var(--text-secondary); border-radius: var(--radius);
@@ -110,25 +117,65 @@ input[type="range"] { accent-color: var(--accent); }
 .card-subtitle { display: block; font-size: 14px; color: var(--text-secondary); }
 
 .play-btn {
-   position: absolute; right: 24px; bottom: 80px;
-   width: 45px; height: 45px; padding: 0; border: 0; border-radius: 50%;
-   background: url("../assets/icons/play.svg") center / contain no-repeat;
-   cursor: pointer;
-   opacity: 0; transform: translateY(8px);
-   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+  position: absolute; right: 24px; bottom: 80px;
+  width: 45px; height: 45px; padding: 0; border: 0; border-radius: 50%;
+  background: url("../assets/icons/play.svg") center / contain no-repeat;
+  cursor: pointer;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
-.play-btn:hover { background-image: url("../assets/icons/play-hover.svg"); }
+
 .card:hover .play-btn, .card:focus-within .play-btn { opacity: 1; transform: none; }
 .card .play-btn:hover {
   background-image: url("../assets/icons/play-hover.svg");
   transform: scale(1.08);
 }
 
+/* One rule that matters: author display values beat the hidden attribute, so enforce it */
+[hidden] { display: none !important; }
+
+/* ===== Report a problem dialog (F5) ===== */
+dialog { width: min(480px, calc(100% - 32px)); padding: 24px;
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--surface-hover); border-radius: var(--radius); }
+dialog::backdrop { background: rgba(0, 0, 0, 0.7); }
+dialog h2 { margin: 0 0 16px; }
+
+.field { margin-bottom: 16px; }
+.field label { display: block; margin-bottom: 6px; font-weight: 600; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 44px; padding: 10px; font: inherit;
+  background: var(--surface-hover); color: var(--text);
+  border: 1px solid var(--text-secondary); border-radius: 4px; }
+.field textarea { resize: vertical; }
+
+/* Error state: red border + icon + text (never colour alone) */
+.field [aria-invalid="true"] { border: 2px solid var(--error); }
+.field-error, .form-summary { display: flex; gap: 6px; margin: 6px 0 0; font-size: 14px; }
+.field-error::before, .form-summary::before { content: "⚠"; color: var(--error); }
+.form-summary { margin: 0 0 16px; font-size: 16px; font-weight: 600; }
+
+.form-actions { display: flex; justify-content: space-between; gap: 16px; margin-top: 24px; }
+.btn-primary { min-height: 44px; padding: 0 24px; font: inherit; font-weight: 700;
+  color: #121212; background: var(--accent); border: 0; border-radius: var(--radius);
+  cursor: pointer; }
+.btn-primary:hover { background: var(--accent-hover); }
+
 @media (hover: none) { .play-btn { opacity: 1; transform: none; } }
+
+@media (min-width: 992px) {
+  .app.panel-hidden { grid-template-columns: 280px 1fr;
+                      grid-template-areas: "sidebar main" "player player"; }
+  .app.panel-hidden .now-playing { display: none; }
+  .app.panel-hidden .card-grid { grid-template-columns: repeat(6, 1fr); }
+  .app:not(.panel-hidden) #panel-toggle { display: none; }
+}
 
 @media (min-width: 992px) and (max-width: 1199px) {
   .app { grid-template-columns: 220px 1fr 280px; }
   .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .app.panel-hidden { grid-template-columns: 220px 1fr; }
+  .app.panel-hidden .card-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 @media (max-width: 991px) {
@@ -155,12 +202,21 @@ input[type="range"] { accent-color: var(--accent); }
 
   /* Player becomes the mini-player: info + play/pause only */
   .player { grid-template-columns: 1fr auto; grid-template-areas: "info controls"; }
-  .progress, .volume { display: none; }
-  .controls button:first-child, .controls button:last-child { display: none; }
+  .player .progress, .player .volume { display: none; }
+  .player .ctrl-prev, .player .ctrl-next { display: none; }
+  .player .controls { justify-content: flex-end; }
 
   .now-playing { width: 100%; }   /* full-screen sheet */
 
   .card-grid { grid-template-columns: repeat(3, 1fr); }
+
+  #panel-toggle { display: none; }
+
+  .sheet-controls { display: block; margin-top: 16px; }
+  .sheet-controls .controls { justify-content: center; margin-top: 8px; }
+  .now-playing .track-title { font-size: 24px; margin-top: 16px; }
+  .now-playing .track-artist { font-size: 16px; }
+  .now-playing .cover { width: min(100%, 360px, 40dvh); align-self: center; }
 }
 
 @media (max-width: 479px) {

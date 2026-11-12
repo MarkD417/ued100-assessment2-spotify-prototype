@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="data:,">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Web Player prototype</title>
@@ -64,8 +65,15 @@
       </section>
     </aside>
 
-    <main id="main">
-      <h1>Made for you</h1>
+    <main id="main" tabindex="-1">
+      <div class="main-header">
+        <h1>Made for you</h1>
+        <button type="button" class="icon-btn" id="panel-toggle"
+                aria-controls="now-playing" aria-expanded="true"
+                aria-label="Now Playing panel">
+          <img src="assets/icons/now-playing.svg" alt="" width="24" height="24">
+        </button>
+      </div>
       <ul class="card-grid">
         <li class="card">
           <a href="#" class="card-link">
@@ -200,26 +208,51 @@
           alt="Cover art for Dissolve by Joji">
       <p class="track-title">Dissolve</p>
       <p class="track-artist">Joji</p>
-      <button type="button" class="btn btn-outline" id="report-btn">Report a problem</button>
+
+      <!-- Seek bar and controls: shown only in the mobile sheet -->
+      <div class="sheet-controls">
+        <div class="progress">
+          <span>1:24</span>
+          <input type="range" min="0" max="100" value="45" aria-label="Seek">
+          <span>2:59</span>
+        </div>
+        <div class="controls">
+          <button type="button" class="ctrl-prev" aria-label="Previous track">
+            <img src="assets/icons/previous.svg" alt="" width="24" height="24">
+          </button>
+          <button type="button" class="ctrl-play" aria-label="Pause">
+            <img src="assets/icons/pause.svg" alt="" width="24" height="24">
+          </button>
+          <button type="button" class="ctrl-next" aria-label="Next track">
+            <img src="assets/icons/next.svg" alt="" width="24" height="24">
+          </button>
+        </div>
+      </div> 
+
+      <button type="button" class="btn-outline" id="report-btn">Report a problem</button>
     </aside>
 
     <section class="player" aria-label="Player">
       <div class="track-info">
-        <img class="thumb" src="assets/images/cover-dissolve.png" alt="">
-        <div>
-          <p class="track-title">Dissolve</p>
-          <p class="track-artist">Joji</p>
-        </div>
+        <button type="button" class="track-info-btn" id="open-now-playing"
+                aria-controls="now-playing" aria-expanded="false"
+                aria-label="Open Now Playing">
+          <img class="thumb" src="assets/images/cover-dissolve.png" alt="">
+          <span class="track-text">
+            <span class="track-title">Dissolve</span>
+            <span class="track-artist">Joji</span>
+          </span>
+        </button>
       </div>
 
       <div class="controls">
-        <button type="button" aria-label="Previous track">
+        <button type="button" class="ctrl-prev" aria-label="Previous track">
           <img src="assets/icons/previous.svg" alt="" width="24" height="24">
         </button>
-        <button type="button" aria-label="Pause">
+        <button type="button" class="ctrl-play" aria-label="Pause">
           <img src="assets/icons/pause.svg" alt="" width="24" height="24">
         </button>
-        <button type="button" aria-label="Next track">
+        <button type="button" class="ctrl-next" aria-label="Next track">
           <img src="assets/icons/next.svg" alt="" width="24" height="24">
         </button>
       </div>
@@ -236,6 +269,49 @@
     </section>
   </div>
 
+  <!-- Report a problem dialog (F5) -->
+  <dialog id="report-dialog" aria-labelledby="report-title">
+    <form id="report-form" novalidate>
+      <h2 id="report-title">Report a problem</h2>
+      <p id="form-summary" class="form-summary" role="alert" hidden></p>
+
+      <div class="field">
+        <label for="report-email">Email</label>
+        <input type="email" id="report-email" name="email" autocomplete="email"
+              aria-describedby="email-error">
+        <p class="field-error" id="email-error" hidden></p>
+      </div>
+
+      <div class="field">
+        <label for="report-type">What went wrong? (optional)</label>
+        <select id="report-type" name="type">
+          <option value="">Choose one</option>
+          <option>Music won't play</option>
+          <option>Wrong track or artist</option>
+          <option>Something looks broken</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="report-message">Message</label>
+        <textarea id="report-message" name="message" rows="4"
+                  aria-describedby="message-error"></textarea>
+        <p class="field-error" id="message-error" hidden></p>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" id="report-cancel" class="btn-outline">Cancel</button>
+        <button type="submit" class="btn-primary">Send</button>
+      </div>
+    </form>
+
+    <!-- Shown after a successful send -->
+    <div id="report-success" hidden>
+      <h2>Thanks, we've got your report</h2>
+      <button type="button" id="report-close" class="btn-primary">Close</button>
+    </div>
+  </dialog>
   <script src="js/script.js"></script>
 </body>
 </html>
