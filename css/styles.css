@@ -74,6 +74,16 @@ input[type="range"] { accent-color: var(--accent); }
   min-width: 44px; min-height: 44px;
 }
 
+.panel-header { display: flex; align-items: center; justify-content: space-between; }
+.icon-btn { font-size: 20px; }
+
+.btn-outline { background: none; color: var(--text); font: inherit; cursor: pointer;
+               border: 1px solid var(--text-secondary); border-radius: var(--radius);
+               min-height: 44px; padding: 0 16px; }
+.btn-outline:hover { border-color: var(--text); }
+.now-playing { display: flex; flex-direction: column; }
+#report-btn { margin-top: auto; }
+
 .library-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
 .library-row .thumb { flex-shrink: 0; width: 48px; height: 48px; border-radius: 4px;
                       background: var(--surface-hover); }
