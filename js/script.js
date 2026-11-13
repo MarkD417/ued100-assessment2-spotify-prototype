@@ -1,15 +1,15 @@
 // UED100 Assessment 2: Spotify Web Player prototype scripts
 
-// ===== F3: Now Playing panel toggle =====
+// F3: Now Playing panel toggle
 const app = document.querySelector('.app');
 const panel = document.getElementById('now-playing');
 const toggle = document.getElementById('panel-toggle');      // top-right button (tablet/desktop)
-const closeBtn = document.getElementById('panel-close');     // ✕ inside the panel
+const closeBtn = document.getElementById('panel-close');     // X inside the panel
 const openBtn = document.getElementById('open-now-playing'); // track info in the player bar
 const wide = window.matchMedia('(min-width: 992px)');        // true at 992 px and wider (desktop layout)
 let lastTrigger = toggle;   // remembers what opened the panel, so focus can return to it
 
-// Is the panel currently showing? Desktop uses panel-hidden, tablet/mobile use is-open.
+// Checks if the panel is open, Desktop uses panel-hidden, tablet/mobile use is-open.
 function isOpen() {
   return wide.matches
     ? !app.classList.contains('panel-hidden')
@@ -46,7 +46,7 @@ openBtn.addEventListener('click', () => {
   setPanel(true);
 });
 
-// Close (✕) button: close and return focus to whatever opened the panel
+// Close (X) button: close and return focus to whatever opened the panel
 closeBtn.addEventListener('click', () => {
   setPanel(false);
   lastTrigger.focus();
@@ -69,7 +69,7 @@ wide.addEventListener('change', () => {
 });
 syncState();
 
-// ===== F5: Report a problem dialog =====
+// F5: Report a problem dialog
 const reportDialog = document.getElementById('report-dialog');
 const reportBtn = document.getElementById('report-btn');
 const reportCancel = document.getElementById('report-cancel');
@@ -78,7 +78,7 @@ const reportCancel = document.getElementById('report-cancel');
 reportBtn.addEventListener('click', () => reportDialog.showModal());
 reportCancel.addEventListener('click', () => reportDialog.close());
 
-// ===== F5: validation =====
+// F5: validation 
 const reportForm = document.getElementById('report-form');
 const formSummary = document.getElementById('form-summary');
 const reportSuccess = document.getElementById('report-success');
@@ -97,7 +97,7 @@ const rules = [
       ? '' : 'Tell us a bit more. 10 characters minimum' }
 ];
 
-// Show or clear one field's error. textContent (not innerHTML) so typed text can never inject markup
+// Show or clear one field's error. textContent so typed text can never inject markup
 function showFieldError(rule, message) {
   const errorEl = document.getElementById(rule.errorId);
   errorEl.textContent = message;
@@ -149,4 +149,117 @@ reportDialog.addEventListener('close', () => {
   formSummary.hidden = true;
   rules.forEach(rule => showFieldError(rule, ''));
   submitted = false;
+});
+
+// F6: audio player
+const audio = document.getElementById('audio');
+const playButtons = document.querySelectorAll('.ctrl-play');   // player bar + mobile sheet
+
+// Make every Play/Pause button match the audio state: icon and label change together
+function updatePlayUI() {
+  const playing = !audio.paused;
+  playButtons.forEach(btn => {
+    btn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    btn.querySelector('img').src = playing
+      ? 'assets/icons/pause.svg'
+      : 'assets/icons/play.svg';
+  });
+}
+
+// One place that starts playback
+function playAudio() {
+  audio.play().catch(err => console.error('Play failed:', err.name));
+}
+
+function togglePlay() {
+  if (audio.paused) playAudio();
+  else audio.pause();
+}
+
+// Card play buttons, load that card's track and play it
+const DEFAULT_SRC = 'assets/audio/track.mp3';
+document.querySelectorAll('.play-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const src = btn.dataset.src || DEFAULT_SRC;
+    if (audio.getAttribute('src') !== src) audio.src = src;   // only reload if it changed
+    playAudio();
+  });
+});
+
+playButtons.forEach(btn => btn.addEventListener('click', togglePlay));
+audio.addEventListener('play', updatePlayUI);
+audio.addEventListener('pause', updatePlayUI);
+audio.addEventListener('ended', updatePlayUI);
+updatePlayUI();   // start in the paused state (shows Play)
+
+// F6: progress and seek
+const progressEls = document.querySelectorAll('.progress');   // player bar + mobile sheet
+
+function formatTime(seconds) {
+  const s = Math.floor(seconds || 0);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+// Refresh the time labels and slider in both progress blocks
+function updateProgress() {
+  const dur = audio.duration || 0;      // NaN until metadata loads, so fall back to 0
+  progressEls.forEach(el => {
+    const [now, slider, total] = el.children;
+    now.textContent = formatTime(audio.currentTime);
+    total.textContent = formatTime(dur);
+    slider.value = dur ? (audio.currentTime / dur) * 100 : 0;
+    slider.setAttribute('aria-valuetext',
+      `${formatTime(audio.currentTime)} of ${formatTime(dur)}`);   // screen readers hear times, not %
+  });
+}
+
+// Dragging or using the arrow keys on a slider seeks the audio
+progressEls.forEach(el => {
+  const slider = el.children[1];
+  slider.step = 'any';                  // smooth seeking instead of 1% jumps
+  slider.addEventListener('input', () => {
+    if (audio.duration) audio.currentTime = (slider.value / 100) * audio.duration;
+    updateProgress();
+  });
+});
+
+audio.addEventListener('timeupdate', updateProgress);
+audio.addEventListener('loadedmetadata', updateProgress);
+updateProgress();
+
+// F6: volume
+const volumeSlider = document.querySelector('.volume input');
+volumeSlider.addEventListener('input', () => {
+  audio.volume = volumeSlider.value / 100;   // slider is 0-100, audio.volume is 0-1
+});
+audio.volume = volumeSlider.value / 100;     // start matching the slider's 60
+
+// F4: playback error
+const playbackError = document.getElementById('playback-error');
+const playbackErrorText = document.getElementById('playback-error-text');
+
+function showPlaybackError() {
+  playbackError.hidden = false;                                  // show first, then set the text,
+  playbackErrorText.textContent = "Couldn't play this track";   // so the alert is announced
+}
+
+function hidePlaybackError() {
+  playbackError.hidden = true;
+  playbackErrorText.textContent = '';
+}
+
+audio.addEventListener('error', showPlaybackError);   // the browser could not load or play the file
+audio.addEventListener('playing', hidePlaybackError); // any successful playback clears the banner
+
+// Retry, try the same source again
+document.getElementById('playback-retry').addEventListener('click', () => {
+  hidePlaybackError();
+  audio.load();
+  playAudio();
+});
+
+// Report, open the form from F5 with the likely problem already chosen
+document.getElementById('playback-report').addEventListener('click', () => {
+  document.getElementById('report-type').value = "Music won't play";
+  reportDialog.showModal();
 });

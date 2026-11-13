@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="data:,">
   <meta charset="UTF-8">
+  <link rel="icon" href="data:,">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Web Player prototype</title>
   <link rel="stylesheet" href="css/styles.css">
@@ -11,6 +11,7 @@
   <a class="skip-link" href="#main">Skip to main content</a>
 
   <div class="app">
+    <!-- Sidebar, primary navigation and library -->
     <aside class="sidebar">
       <nav aria-label="Primary">
         <ul class="nav-list">
@@ -65,6 +66,7 @@
       </section>
     </aside>
 
+    <!-- Main - playlist cards -->
     <main id="main" tabindex="-1">
       <div class="main-header">
         <h1>Made for you</h1>
@@ -73,6 +75,14 @@
                 aria-label="Now Playing panel">
           <img src="assets/icons/now-playing.svg" alt="" width="24" height="24">
         </button>
+      </div>
+      <!-- Playback error banner -->
+      <div class="playback-error" id="playback-error" hidden>
+        <p id="playback-error-text" role="alert"></p>
+        <div class="playback-error-actions">
+          <button type="button" class="btn-primary" id="playback-retry">Retry</button>
+          <button type="button" class="btn-outline" id="playback-report">Report</button>
+        </div>
       </div>
       <ul class="card-grid">
         <li class="card">
@@ -154,6 +164,9 @@
           <button 
             type="button" class="play-btn" aria-label="Play Tired">
           </button>
+          <button 
+            type="button" class="play-btn" data-src="assets/audio/missing.mp3" aria-label="Play Tired">
+          </button>
         </li>
         <li class="card">
           <a href="#" class="card-link">
@@ -198,6 +211,7 @@
       </ul>
     </main>
 
+    <!-- Now Playing panel (becomes a drawer on tablet, full-screen sheet on mobile)-->
     <aside class="now-playing" id="now-playing" aria-label="Now playing">
       <div class="panel-header">
         <h2>Now Playing</h2>
@@ -205,9 +219,9 @@
                 aria-label="Hide Now Playing panel">✕</button>
       </div>
       <img class="cover" src="assets/images/cover-dissolve.png"
-          alt="Cover art for Dissolve by Joji">
-      <p class="track-title">Dissolve</p>
-      <p class="track-artist">Joji</p>
+          alt="Cover art for Upbeat by Tatamusic">
+      <p class="track-title">Upbeat</p>
+      <p class="track-artist">Tatamusic</p>
 
       <!-- Seek bar and controls: shown only in the mobile sheet -->
       <div class="sheet-controls">
@@ -232,6 +246,7 @@
       <button type="button" class="btn-outline" id="report-btn">Report a problem</button>
     </aside>
 
+    <!-- Player bar (becomes a mini-player on mobile)-->
     <section class="player" aria-label="Player">
       <div class="track-info">
         <button type="button" class="track-info-btn" id="open-now-playing"
@@ -239,8 +254,8 @@
                 aria-label="Open Now Playing">
           <img class="thumb" src="assets/images/cover-dissolve.png" alt="">
           <span class="track-text">
-            <span class="track-title">Dissolve</span>
-            <span class="track-artist">Joji</span>
+            <span class="track-title">Upbeat</span>
+            <span class="track-artist">Tatamusic</span>
           </span>
         </button>
       </div>
@@ -306,13 +321,14 @@
       </div>
     </form>
 
-    <!-- Shown after a successful send -->
+    <!-- Shown after a successfully sent report -->
     <div id="report-success" hidden>
       <h2>Thanks, we've got your report</h2>
       <button type="button" id="report-close" class="btn-primary">Close</button>
     </div>
   </dialog>
-    <audio id="audio" src="assets/audio/track.mp3" preload="metadata"></audio>
+      <!-- Track: "Upbeat Music" by Tatamusic, Pixabay Content License -->
+      <audio id="audio" src="assets/audio/track.mp3" preload="metadata"></audio>
   <script src="js/script.js"></script>
 </body>
 </html>
