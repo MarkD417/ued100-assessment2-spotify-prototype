@@ -31,7 +31,7 @@
 | 28 | Responsive | Banner at 375 px and when scrolling | Triggered the error at 375 px, then scrolled the cards | The banner stays at the top while scrolling, which keeps the error visible | Kept (it uses `position: sticky`) | Pass |
 | 29 | Cross-browser | Play, panel toggle and report form | Edge and Firefox | None | No changes | Pass |
 | 30 | Accessibility | Keyboard-only run at 1280 px | Tab, Shift+Tab, Enter, Space, arrows, Esc | No issues | No changes | Pass |
-| 31 | Usability | Participant 1, tasks 1–8 | In person at my computer at 1280 px, then 375 px for task 8 | Task 4: hesitated at the X because it gave no clue it hides the panel | Added the word "Hide" next to the X | Retest with Participant 2 |
+| 31 | Usability | Participant 1, tasks 1–8 | In person at my computer at 1280 px, then 375 px for task 8 | Task 4: hesitated at the X because it gave no clue it hides the panel | Added the word "Hide" next to the X | Participant 2 had no problems closing the Now Playing panel and didn't hesitate |
 
 **Browsers tested:** Firefox and Edge 
 
@@ -53,11 +53,11 @@
 **Participant 2** (anonymous, in person, 1280 px; task 8 at 375 px)
 | Task | Result | Notes |
 |---|---|---|
-| 1 Play a playlist |  |  |
-| 2 Quieter, then pause |  |  |
-| 3 Seek to the middle |  |  |
-| 4 Hide and show Now Playing |  |  |
-| 5 Play Tired |  |  |
-| 6 Get music playing again |  |  |
-| 7 Send a report (empty email first) |  |  |
-| 8 Phone view: open the sheet and pause |  |  |
+| 1 Play a playlist | Pass |  |
+| 2 Quieter, then pause | Pass |  |
+| 3 Seek to the middle | Pass |  |
+| 4 Hide and show Now Playing | Pass | Didn't hesitate like participant 1 |
+| 5 Play Tired | Pass |  |
+| 6 Get music playing again | Pass |  |
+| 7 Send a report (empty email first) | Pass |  |
+| 8 Phone view: open the sheet and pause | Pass |  |
