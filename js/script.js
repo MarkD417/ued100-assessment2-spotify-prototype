@@ -263,3 +263,17 @@ document.getElementById('playback-report').addEventListener('click', () => {
   document.getElementById('report-type').value = "Music won't play";
   reportDialog.showModal();
 });
+
+// Focus order fix 
+// On phones the nav bar is displayed at the bottom, so it must also be last in the
+// DOM, or keyboard focus goes to the bottom nav before the playlists. 
+// On larger screens it is first.
+const sidebar = document.querySelector('.sidebar');
+const phone = window.matchMedia('(max-width: 767px)');
+
+function placeSidebar() {
+  if (phone.matches) app.append(sidebar);    // end of .app: matches the visual order
+  else app.prepend(sidebar);                 // start of .app: sidebar is on the left
+}
+phone.addEventListener('change', placeSidebar);
+placeSidebar();
