@@ -31,7 +31,11 @@ A responsive prototype of the Spotify Web Player home screen, built with HTML, C
 - F7 Playlist cards: 12 playlist cards with different gradient covers, a green play button appears on hover or when focused on keyboard and remains visible on touch screens.
 
 ## Testing summary
-[3 to 5 lines. HTML and CSS validators passed; tested in Firefox and Edge; keyboard-only pass found a focus-order problem at 375 px, which was fixed; usability testing with N participants led to [the change]. Link to `docs/testing-log.md`.]
+- Validation: HTML and CSS validators both passed with no errors
+- Browsers: Firefox and Edge
+- Accessibility: Keyboard test. Which Tab reached the bottom navigation before the content, when the screen size shrunk to 375 px. To fix this the nav was moved in the DOM then retested.
+- Usability: 2 participants. Participant 1 hesitated to click the X in the top right of the Now Playing panel when asked to close it. As a result I added the word "Hide" near the X. Participant 2 completed every task without difficulty and understood what they needed to do.
+- Full evidence is in `docs/testing-log.md`, and each test links to a requirement in `docs/traceability.md`.
 
 ## Differences from Assessment 1
 - This prototype restructures into a drawer and a bottom tab bar instead of clipping on small windows
