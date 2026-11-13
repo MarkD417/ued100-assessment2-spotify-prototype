@@ -117,6 +117,7 @@ function validateForm() {
   return failed;
 }
 
+// Checks the report fields to make sure there are valid inputs, returns error if not and returns a success message if all inputs are valid. Nothing gets sent in this prototype
 reportForm.addEventListener('submit', (e) => {
   e.preventDefault();               // prototype: nothing is sent anywhere
   submitted = true;
@@ -186,7 +187,10 @@ document.querySelectorAll('.play-btn').forEach(btn => {
   });
 });
 
+// Clicking Play/Pause button gets the audio to play or pause
 playButtons.forEach(btn => btn.addEventListener('click', togglePlay));
+
+// The audio's events update every button
 audio.addEventListener('play', updatePlayUI);
 audio.addEventListener('pause', updatePlayUI);
 audio.addEventListener('ended', updatePlayUI);
@@ -195,9 +199,10 @@ updatePlayUI();   // start in the paused state (shows Play)
 // F6: progress and seek
 const progressEls = document.querySelectorAll('.progress');   // player bar + mobile sheet
 
+// Turns a number of seconds into m:ss text
 function formatTime(seconds) {
   const s = Math.floor(seconds || 0);
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; // padStart adds the leading zero: 5 becomes "05"
 }
 
 // Refresh the time labels and slider in both progress blocks
@@ -223,6 +228,7 @@ progressEls.forEach(el => {
   });
 });
 
+// Keeps the progress bar updated with the audio
 audio.addEventListener('timeupdate', updateProgress);
 audio.addEventListener('loadedmetadata', updateProgress);
 updateProgress();
@@ -238,16 +244,19 @@ audio.volume = volumeSlider.value / 100;     // start matching the slider's 60
 const playbackError = document.getElementById('playback-error');
 const playbackErrorText = document.getElementById('playback-error-text');
 
+// Shows error when a track can't be played
 function showPlaybackError() {
-  playbackError.hidden = false;                                  // show first, then set the text,
-  playbackErrorText.textContent = "Couldn't play this track";   // so the alert is announced
+  playbackError.hidden = false;            
+  playbackErrorText.textContent = "Couldn't play this track";   
 }
 
+// Hides playback error when track is playing successfully
 function hidePlaybackError() {
   playbackError.hidden = true;
   playbackErrorText.textContent = '';
 }
 
+//
 audio.addEventListener('error', showPlaybackError);   // the browser could not load or play the file
 audio.addEventListener('playing', hidePlaybackError); // any successful playback clears the banner
 
@@ -271,6 +280,7 @@ document.getElementById('playback-report').addEventListener('click', () => {
 const sidebar = document.querySelector('.sidebar');
 const phone = window.matchMedia('(max-width: 767px)');
 
+//
 function placeSidebar() {
   if (phone.matches) app.append(sidebar);    // end of .app: matches the visual order
   else app.prepend(sidebar);                 // start of .app: sidebar is on the left
