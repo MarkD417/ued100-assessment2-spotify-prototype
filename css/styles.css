@@ -1,4 +1,4 @@
-/* Design tokens */
+/* ---- Design tokens ---- */
 :root {
   --bg: #121212;
   --surface: #181818;
@@ -12,11 +12,17 @@
   --gap: 8px;
 }
 
+/* ---- Base Styles ---- */
+/* The padding and border count inside an element's width, allowing the panels and cards to fit the grid */
 * { box-sizing: border-box; }
+/* Page colours and font come from the design tokens. No default margin */
 body { margin: 0; background: var(--bg); color: var(--text);
        font-family: Inter, system-ui, sans-serif; }
 
-/* Layout */
+/* ---- Layout ---- */
+/*  Page shell, allows the layout to be rearranged at breakpoints without touching HTML.
+There are two heights as 100dvh is the height for phones and 100vh is a fallback for older
+browsers. */
 .app {
   display: grid;
   height: 100vh;
@@ -30,7 +36,7 @@ body { margin: 0; background: var(--bg); color: var(--text);
     "player  player player";
 }
 .sidebar     { grid-area: sidebar; }
-main         { grid-area: main; overflow-y: auto; }
+main         { grid-area: main; overflow-y: auto; scrollbar-color: #535353 transparent; }
 .now-playing { grid-area: panel; }
 .player      { grid-area: player; }
 
@@ -45,15 +51,15 @@ main         { grid-area: main; overflow-y: auto; }
 
 .main-header { display: flex; align-items: center; justify-content: space-between; }
 
-/* Panels */
+/* ---- Panels ---- */
 .sidebar, .now-playing, .player { background: var(--surface); border-radius: var(--radius); }
 .sidebar, main, .now-playing { padding: 16px; overflow-y: auto; }
 
 /* Panel close button: X plus the word "Hide" so its purpose is clear (usability test, Participant 1) */
 #panel-close { display: flex; align-items: center; gap: 6px; padding: 0 12px; font-size: 16px; }
 
-/* Navigation */
-/* Nav (icon above label, same at every size) */
+/* ---- Navigation ----
+ Icon above label, same at every size */
 .nav-list, .library-list { list-style: none; margin: 0; padding: 0; }
 .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px;
   min-height: 56px; padding: 8px; font-size: 12px; text-decoration: none;
@@ -67,8 +73,6 @@ main         { grid-area: main; overflow-y: auto; }
   width: 24px; height: 3px; background: var(--accent);
   border-radius: 2px; transform: translateX(-50%);
 }
-
-main { scrollbar-color: #535353 transparent; }
 
 /* Player bar: info, controls over progress, and volume */
 .player { display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center;
@@ -88,6 +92,8 @@ input[type="range"] { accent-color: var(--accent); }
   text-align: left; cursor: pointer; }
 .track-info-btn .track-title, .track-info-btn .track-artist { display: block; }
 
+/* ---- Buttons ----
+At least 44 px square */
 .controls button, .icon-btn {
   background: none; border: 0; color: var(--text); cursor: pointer;
   min-width: 44px; min-height: 44px;
@@ -109,7 +115,7 @@ input[type="range"] { accent-color: var(--accent); }
                       background: var(--surface-hover); }
 .cover { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--radius); }
 
-/* Playlist cards */
+/* ---- Playlist cards ---- */
 .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
              list-style: none; margin: 0; padding: 0; }
 
@@ -123,6 +129,8 @@ input[type="range"] { accent-color: var(--accent); }
 .card-title { display: block; margin-top: 12px; font-weight: 700; font-size: 16px; }
 .card-subtitle { display: block; font-size: 14px; color: var(--text-secondary); }
 
+/* Green play button over each card. Remains hidden and slightly lowered until hovered or focuses, then it fades and slides up.
+There is a seperate hover svg version */
 .play-btn {
   position: absolute; right: 24px; bottom: 80px;
   width: 45px; height: 45px; padding: 0; border: 0; border-radius: 50%;
@@ -132,16 +140,17 @@ input[type="range"] { accent-color: var(--accent); }
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
+/* Reveal on hover or keyboard focus. Touch screens have no hover, so they always show it */
 .card:hover .play-btn, .card:focus-within .play-btn { opacity: 1; transform: none; }
 .card .play-btn:hover {
   background-image: url("../assets/icons/play-hover.svg");
   transform: scale(1.08);
 }
 
-
+/* This attritube loses to rules like display: flex, so this makes it always win */
 [hidden] { display: none !important; }
 
-/* Report a problem dialog (F5) */
+/* ---- Report a problem dialog (F5) ---- */
 dialog { width: min(480px, calc(100% - 32px)); padding: 24px;
   background: var(--bg); color: var(--text);
   border: 1px solid var(--surface-hover); border-radius: var(--radius); }
@@ -168,19 +177,22 @@ dialog h2 { margin: 0 0 16px; }
   cursor: pointer; }
 .btn-primary:hover { background: var(--accent-hover); }
 
-/* Playback error banner (F4) */
+/* ---- Playback error banner (F4) ---- 
+Sticky, so it stays in view if the user scrolls through the cards */
 .playback-error { position: sticky; top: 0; z-index: 10;
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
   margin-bottom: 16px; padding: 12px 16px;
   background: var(--surface-hover); border-left: 4px solid var(--error);
   border-radius: var(--radius); }
 .playback-error p { margin: 0; flex: 1 1 200px; font-weight: 600; }
-.playback-error p::before { content: "⚠ "; color: var(--error); } 
+.playback-error p::before { content: "⚠ "; color: var(--error); }
 .playback-error-actions { display: flex; gap: 8px; }
 
+/* Reveal on hover or keyboard focus. Touch screens have no hover, so they always show it */
 @media (hover: none) { .play-btn { opacity: 1; transform: none; } }
 
-/* Responsive */
+/* ---- Responsive ---- */
+/* 992 px and up. When the panel is hidden, the cards get more room */
 @media (min-width: 992px) {
   .app.panel-hidden { grid-template-columns: 280px 1fr;
                       grid-template-areas: "sidebar main" "player player"; }
@@ -189,6 +201,7 @@ dialog h2 { margin: 0 0 16px; }
   .app:not(.panel-hidden) #panel-toggle { display: none; }
 }
 
+/* 992 to 1199 px. Narrower side panels and 2 card columns */
 @media (min-width: 992px) and (max-width: 1199px) {
   .app { grid-template-columns: 220px 1fr 280px; }
   .card-grid { grid-template-columns: repeat(2, 1fr); }
@@ -196,12 +209,14 @@ dialog h2 { margin: 0 0 16px; }
   .app.panel-hidden .card-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
+/* Up to 991 px. Icon rail, and Now Playing becomes a drawer */
 @media (max-width: 991px) {
   .app { grid-template-columns: 88px 1fr;
          grid-template-areas: "sidebar main" "player player"; }
   .library { display: none; }
 
-  /* Now Playing becomes a drawer */
+  /* Now Playing becomes a drawer. Slides off-screen when closed.
+   Visibility: hidden also removes it from the Tab order, and the 0.2s delay waits for the slide to finish before hiding */
   .now-playing { position: fixed; top: 0; right: 0; bottom: 0; width: 320px; z-index: 50;
     transform: translateX(100%); visibility: hidden;
     transition: transform 0.2s ease-out, visibility 0s 0.2s; }
@@ -211,6 +226,7 @@ dialog h2 { margin: 0 0 16px; }
    .card-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
+/* Up to 767 px. Single column, bottom nav, mini-player, full-screen Now Playing */
 @media (max-width: 767px) {
   .app { grid-template-columns: 1fr; padding: 0; gap: 0;
          grid-template-rows: 1fr auto auto;
@@ -237,10 +253,12 @@ dialog h2 { margin: 0 0 16px; }
   .now-playing .cover { width: min(100%, 360px, 40dvh); align-self: center; }
 }
 
+/* Up to 479 px. Phones, 2 card columns */
 @media (max-width: 479px) {
   .card-grid { grid-template-columns: repeat(2, 1fr); }     /* phones */
 }
 
+/* Respect users who have turned off animations in their system settings */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }

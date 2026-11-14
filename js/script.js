@@ -256,9 +256,9 @@ function hidePlaybackError() {
   playbackErrorText.textContent = '';
 }
 
-//
-audio.addEventListener('error', showPlaybackError);   // the browser could not load or play the file
-audio.addEventListener('playing', hidePlaybackError); // any successful playback clears the banner
+// The banner follows what the audio is doing without anything else triggering it
+audio.addEventListener('error', showPlaybackError); 
+audio.addEventListener('playing', hidePlaybackError);
 
 // Retry, try the same source again
 document.getElementById('playback-retry').addEventListener('click', () => {
@@ -267,7 +267,7 @@ document.getElementById('playback-retry').addEventListener('click', () => {
   playAudio();
 });
 
-// Report, open the form from F5 with the likely problem already chosen
+// Report, open the form with the likely problem already chosen
 document.getElementById('playback-report').addEventListener('click', () => {
   document.getElementById('report-type').value = "Music won't play";
   reportDialog.showModal();
@@ -280,7 +280,7 @@ document.getElementById('playback-report').addEventListener('click', () => {
 const sidebar = document.querySelector('.sidebar');
 const phone = window.matchMedia('(max-width: 767px)');
 
-//
+// Keeps the phone nav last in the page so the Tab order matches the screen
 function placeSidebar() {
   if (phone.matches) app.append(sidebar);    // end of .app: matches the visual order
   else app.prepend(sidebar);                 // start of .app: sidebar is on the left
