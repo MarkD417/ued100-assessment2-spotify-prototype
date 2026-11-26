@@ -1,0 +1,92 @@
+BEFORE (frozen A2 version) - Form tests
+Date: 26 Nov 2026   Browser: Firefox   Page: localhost via Live Server
+
+#  Test                               Result  Notes
+1  All fields valid                   Pass
+2  All fields empty                   Pass
+3  One required field empty at a time Pass
+4  Spaces only                        Pass
+5  Too short                          Pass
+6  Too long (500 chars)               FAIL    No length limit, accepted
+7  Wrong format                       Pass
+8  Boundary values                    Pass    Min enforced; max can't be tested (no max, see test 6)
+9  Special characters                 Pass    Accepted in message and valid email
+10 Real-time feedback                 FAIL    Validation only on submit
+11 Enter / double-click               Pass    No duplicate; 2nd click hits Close (minor, F3)
+
+Total: 9/11 passed
+
+BEFORE (frozen A2 version) - XSS tests
+Payloads typed into the message box and the email field (spaces removed so the email passed validation).
+Note: static client-side prototype, no server or stored data, so this tests display-side injection only.
+
+#   Payload                          Result  Notes
+X1  <script>alert(1)</script>        Pass    Shown as text, no popup
+X2  <img src=x onerror=alert(1)>     Pass    Shown as text, no popup
+X3  "><svg onload=alert(1)>          Pass    Shown as text, no popup
+X4  <b>bold</b>                      Pass    Shown as literal text
+X5  javascript:alert(1)              Pass    Plain text, not clickable
+
+Total: 5/5 passed
+
+
+BEFORE - Code search (VS Code, Ctrl+Shift+F)
+
+Term             Result
+innerHTML        Not used (only mentioned in .md files saying it isn't used)
+outerHTML        No matches
+document.write   No matches
+eval(            No matches
+
+Evidence: before_innerhtml_search.png
+
+
+BEFORE - Screen sizes (Firefox Responsive Design Mode)
+
+Width    Result
+320 px   Pass
+375 px   Pass
+768 px   Pass
+1024 px  Pass
+1440 px  Pass
+
+Total: 5/5 passed
+Evidence: before_responsive_320.png, before_responsive_1440.png
+
+
+BEFORE - Network check (report-form workflow)
+
+All requests go to 127.0.0.1:5500 (Live Server). No external http:// requests.
+Insecure requests: 0
+Notes: Live Server WebSocket (ws) is auto-reload, not part of the prototype.
+       pause.svg shows NS_BINDING_ABORTED (cancelled request, not a security issue).
+       Localhost is not real HTTPS (limitation).
+Evidence: before_network.png
+
+
+BEFORE - Lighthouse (v13.5.0, localhost, simulated slow 4G)
+
+              Mobile  Desktop
+Performance   96      100
+Accessibility 100     100
+Best Practices 96     96
+SEO           91      91
+Evidence: before_lighthouse_mobile.pdf, before_lighthouse_desktop.pdf
+Console errors on page load: 0
+
+
+BEFORE - WAVE and keyboard walkthrough
+
+WAVE: Errors 0, Contrast Errors 0, Alerts 1 (HTML5 video/audio, manual check, no action needed),
+      Features 18, Structure 12, ARIA 48, AIM Score 10/10
+Keyboard walkthrough: every control reachable, focus outline visible on everything,
+      order makes sense, nothing stuck.
+Evidence: before_wave_summary.png, before_wave_details.png, before_keyboard_walkthrough.txt
+
+
+BEFORE - Findings so far (for Appendix D)
+
+ID  Finding                                              Severity
+F1  Message field has no maximum length (500+ accepted)  Major
+F2  Validation only on submit, no real-time feedback     Major
+F3  Second quick click after submit hits Close button    Minor

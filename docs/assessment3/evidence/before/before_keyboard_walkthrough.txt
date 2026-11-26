@@ -1,0 +1,10 @@
+26/11/2026 
+Firefox
+
+With the keyboard walkthrough there were no reported issues
+
+Areas investigated:
+- Whether every control can be reached
+- Whether the focus outline is visible on each one
+- Whether the order makes sense
+- Whether the walkthrough got stuck or focus disappeared
