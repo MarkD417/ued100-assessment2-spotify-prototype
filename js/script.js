@@ -86,6 +86,7 @@ const reportCloseBtn = document.getElementById('report-close');
 const emailInput = document.getElementById('report-email');
 const messageInput = document.getElementById('report-message');
 let submitted = false;   // after the first Send attempt, fields re-check as the user types
+let successShownAt = 0;   // ignore a stray double-click on Close right after sending
 
 // Each rule returns an error message, or '' if the value is fine
 const rules = [
@@ -117,6 +118,19 @@ function validateForm() {
   return failed;
 }
 
+// F2: real-time feedback. Check each field when the user leaves it,
+// then keep re-checking as they type, so errors appear and clear straight away
+const touched = new Set();
+rules.forEach(rule => {
+  rule.input.addEventListener('blur', () => {
+    touched.add(rule);
+    showFieldError(rule, rule.check(rule.input.value));
+  });
+  rule.input.addEventListener('input', () => {
+    if (touched.has(rule)) showFieldError(rule, rule.check(rule.input.value));
+  });
+});
+
 // Checks the report fields to make sure there are valid inputs, returns error if not and returns a success message if all inputs are valid. Nothing gets sent in this prototype
 reportForm.addEventListener('submit', (e) => {
   e.preventDefault();               // prototype: nothing is sent anywhere
@@ -128,6 +142,7 @@ reportForm.addEventListener('submit', (e) => {
     formSummary.hidden = false;
     failed[0].input.focus();        // take the user straight to the first problem
   } else {
+    successShownAt = Date.now();      // when the confirmation appeared
     formSummary.hidden = true;
     reportForm.hidden = true;
     reportSuccess.hidden = false;
@@ -141,9 +156,13 @@ reportForm.addEventListener('input', () => {
   if (validateForm().length === 0) formSummary.hidden = true;
 });
 
-// Close button on the success view; reset everything whenever the dialog closes
-reportCloseBtn.addEventListener('click', () => reportDialog.close());
+// Close button on the success view: ignore clicks in the first 600 ms (accidental second click)
+reportCloseBtn.addEventListener('click', () => {
+  if (Date.now() - successShownAt < 600) return;
+  reportDialog.close();
+});
 reportDialog.addEventListener('close', () => {
+  touched.clear();
   reportForm.reset();
   reportForm.hidden = false;
   reportSuccess.hidden = true;
