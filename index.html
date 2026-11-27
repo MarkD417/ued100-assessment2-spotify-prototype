@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="description" content="Spotify Web Player prototype: browse playlists, play music and report playback problems.">
   <link rel="icon" href="data:,">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Web Player prototype</title>
@@ -283,7 +284,7 @@
 
       <div class="field">
         <label for="report-message">Message</label>
-        <textarea id="report-message" name="message" rows="4"
+        <textarea id="report-message" name="message" rows="4" maxlength="500"
                   aria-describedby="message-error"></textarea>
         <p class="field-error" id="message-error" hidden></p>
       </div>

@@ -1,0 +1,23 @@
+UED100 Assessment 2 - marker feedback (received before Assessment 3 testing)
+Student: Mark
+Saved: Friday 27 November 2026
+
+[Prototype and features]
+Mark, this is an excellent prototype. Your Spotify Web Player restructures properly at 992px and 768px, from a three-panel desktop layout to an icon rail on tablet and a bottom tab bar on phones, and your Now Playing panel becomes a drawer or sheet with a visible toggle and a labelled "Hide" control. You went beyond mock behaviour: playback uses a real audio element with synced play and pause across the player bar, cards and phone sheet, seek and volume sliders, a playback error banner triggered by a genuine audio error event, and a native report-a-problem dialog with a validation summary. Your own icons, cover art and card gradients, together with your Figma wireframes at three sizes, style guide, components and mockups, give the prototype a cohesive, polished look. Every feature is traceable to a specific Assessment 1 finding.
+
+The remaining gaps are in scope rather than quality: Search, Library, Previous and Next do nothing, and there is only one track. Even simple working versions of these (for example a basic card filter for Search) would round out the interface.
+
+[Link to Assessment 1 / design reasoning]
+Your concept is tightly linked to your Assessment 1 context. Your traceability table maps each requirement or marker comment to a feature, the technology chosen and why, how you tested it, and whether it differs from Assessment 1, so the reasoning behind each design decision is easy to follow. Your report applies this well (the clipping layout, the hard-to-find hide button and the unexplained error message each became a specific fix), and you support your decisions with WCAG 2.2 and the W3C's Using ARIA guidance.
+
+The prototype could say more about the people and the business behind it. Your report focuses on interface problems, but does not describe the target users or what Spotify, as the business, needs to achieve (for example listener retention or reduced support contacts). The references are also limited to two sources. Stating the user groups and business goals alongside each fix would complete this.
+
+[Testing]
+This is where your work stands out. Your testing log has 31 entries covering responsive checks at several widths, functional tests of every interactive feature (including empty, 9-character and 10-character form input and a tag-injection test), HTML and CSS validator passes, keyboard-only runs, cross-browser checks and two usability sessions. Crucially, the evidence changed the product: a keyboard test at 375px found the focus order was wrong (Tab reached the bottom nav before the content), so you moved the nav in the DOM and retested, with before and after screenshots, and Participant 1's hesitation at the unlabelled X led directly to the "Hide" label. The traceability table shows each result, and your report explains the fixes clearly.
+
+To reach the very top, widen the testing base: the browsers tested were Firefox and Edge only (no Chrome or Safari), there were two participants, and there is no performance check (for example Lighthouse, or compression of the 3.6MB audio file). Mentioning these limits in your report would also strengthen your justification.
+
+[Process and documentation]
+Your process is exceptionally well documented. Your repository shows 27 commits over nearly a week, with meaningful messages tracking the Figma work, features, fixes and documentation, and your README explains how to run the project, the folder structure, features, testing summary, differences from Assessment 1, limitations and credits. Your traceability table, testing log, build notes and AI-use log connect the design, code and evidence, and your HTML, CSS and JavaScript files are clearly commented, with notes explaining why each part exists. Your Figma link and exports are included.
+
+A few details could be tighter. The Word report is a little over the word target and does not itself carry the AI acknowledgement (it is in your README and ai-use-log, but the report is the document that should state it). Some documents contain typos and repetitive log entries (several near-identical rows for the Now Playing toggle), and one commit message reads "partially complete". A final proofread of the report and logs would lift this to the top of the band.

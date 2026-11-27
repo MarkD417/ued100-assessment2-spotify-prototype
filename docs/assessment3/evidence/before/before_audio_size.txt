@@ -1,0 +1,3 @@
+Audio file was at 3.50 MB (3,676,369 bytes)
+
+This was before applying fixes for Assessment 3
