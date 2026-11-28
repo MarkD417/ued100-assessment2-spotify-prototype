@@ -1,0 +1,47 @@
+AFTER (revised version) - Form tests
+Date: 28 Nov 2026   Browser: Firefox   Page: localhost via Live Server
+
+#  Test                               Result  Notes
+1  All fields valid                   Pass
+2  All fields empty                   Pass
+3  One required field empty at a time Pass
+4  Spaces only                        Pass
+5  Too short                          Pass
+6  Too long (500 / 600 chars)         Pass    F1 fixed: limited to 500 (was FAIL)
+7  Wrong format                       Pass
+8  Boundary values                    Pass    Max (500) now testable
+9  Special characters                 Pass    Accepted
+10 Real-time feedback                 Pass    F2 fixed (was FAIL)
+11 Enter / double-click               Pass    F3 fixed: confirmation stays (was minor issue)
+
+Total: 11/11 passed (before: 9/11)
+
+AFTER - XSS tests
+Payloads typed into the message box and the email field (spaces removed so the email passed validation).
+
+#   Payload                          Result  Notes
+X1  <script>alert(1)</script>        Pass    Shown as text, no popup
+X2  <img src=x onerror=alert(1)>     Pass    Shown as text, no popup
+X3  "><svg onload=alert(1)>          Pass    Shown as text, no popup
+X4  <b>bold</b>                      Pass    Shown as literal text
+X5  javascript:alert(1)              Pass    Plain text, not clickable
+
+Total: 5/5 passed (before: 5/5)
+
+AFTER - Code search (VS Code, Ctrl+Shift+F)
+
+Term             Result
+innerHTML        Not used (only mentioned in .md files saying it isn't used)
+outerHTML        No matches
+document.write   No matches
+eval(            No matches
+
+Evidence: after_innerhtml_search.png
+
+AFTER - Chrome check
+Chrome added to the browsers tested (A2 tested Firefox and Edge only).
+Safari not tested (not available on Windows).
+Page loads and layout normal: [Pass/Fail]
+Form test (invalid email, then fixed): [Pass/Fail]
+375 px layout (bottom tab bar): [Pass/Fail]
+Evidence: after_chrome.png, after_chrome_375.png
